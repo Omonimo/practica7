@@ -30,6 +30,10 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
                       double promedio,
                       int    edad) {
         // Aquí va su código.
+	this.nombre = nombre;
+	this.cuenta = cuenta;
+	this.promedio = promedio;
+	this.edad = edad;
     }
 
     /**
@@ -38,6 +42,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     public String getNombre() {
         // Aquí va su código.
+	return this.nombre;
     }
 
     /**
@@ -46,6 +51,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     public void setNombre(String nombre) {
         // Aquí va su código.
+	this.nombre = nombre;
     }
 
     /**
@@ -54,6 +60,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     public int getCuenta() {
         // Aquí va su código.
+	return this.cuenta;
     }
 
     /**
@@ -62,6 +69,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     public void setCuenta(int cuenta) {
         // Aquí va su código.
+	this.cuenta = cuenta;
     }
 
     /**
@@ -70,6 +78,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     public double getPromedio() {
         // Aquí va su código.
+	return promedio;
     }
 
     /**
@@ -78,6 +87,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     public void setPromedio(double promedio) {
         // Aquí va su código.
+	this.promedio = promedio;
     }
 
     /**
@@ -86,6 +96,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     public int getEdad() {
         // Aquí va su código.
+	return this.edad;
     }
 
     /**
@@ -94,6 +105,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     public void setEdad(int edad) {
         // Aquí va su código.
+	this.edad = edad;
     }
 
     /**
@@ -102,6 +114,11 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     @Override public String toString() {
         // Aquí va su código.
+	return String.format("Nombre   : %s\n" +
+                     "Cuenta   : %09d\n" +
+                     "Promedio : %2.2f\n" +
+                     "Edad     : %d",
+			     nombre, cuenta, promedio, edad);
     }
 
     /**
@@ -117,6 +134,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
             return false;
         Estudiante estudiante = (Estudiante)objeto;
         // Aquí va su código.
+	 return nombre.equals(estudiante.nombre) && cuenta == estudiante.cuenta && promedio == estudiante.promedio && edad == estudiante.edad;
     }
 
     /**
@@ -127,6 +145,7 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     @Override public String seria() {
         // Aquí va su código.
+	return String.format("%s\t%d\t%2.2f\t%d\n", nombre, cuenta, promedio, edad);
     }
 
     /**
@@ -139,6 +158,24 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     @Override public void deseria(String linea) {
         // Aquí va su código.
+	 String lineaSinEspacios = linea.trim();
+
+        if(lineaSinEspacios == null || lineaSinEspacios.equals(""))
+            throw new ExcepcionLineaInvalida("Linea invalida");
+        
+        String[] porDeseriar = lineaSinEspacios.split("\t", 4);
+        //int palabrasEnLinea = linea.split("\t").length;
+        if(porDeseriar.length != 4)
+            throw new ExcepcionLineaInvalida("Linea invalida");
+        try {
+        this.nombre = porDeseriar[0];
+        this.cuenta = Integer.parseInt(porDeseriar[1]);
+        this.promedio =  Double.parseDouble(porDeseriar[2]);
+        this.edad =  Integer.parseInt(porDeseriar[3]);
+
+        } catch (NumberFormatException e) {
+            throw new ExcepcionLineaInvalida("Linea invalida");
+        }
     }
 
     /**
@@ -148,8 +185,17 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     @Override public void actualiza(Estudiante estudiante) {
         // Aquí va su código.
+	        if (estudiante == null) {
+            throw new IllegalArgumentException();
+        } else {
+            this.nombre = estudiante.nombre;
+            this.cuenta = estudiante.cuenta;
+            this.promedio = estudiante.promedio;
+            this.edad = estudiante.edad;
+        }
     }
 
+    
     /**
      * Nos dice si el estudiante casa el valor dado en el campo especificado.
      * @param campo el campo que hay que casar.
@@ -177,5 +223,53 @@ public class Estudiante implements Registro<Estudiante, CampoEstudiante> {
      */
     @Override public boolean casa(CampoEstudiante campo, Object valor) {
         // Aquí va su código.
+	if(campo == null)
+            throw new IllegalArgumentException();
+
+        if(!(campo instanceof CampoEstudiante))
+                throw new IllegalArgumentException();
+
+        CampoEstudiante camp = (CampoEstudiante)campo;
+
+        switch(camp){
+            case NOMBRE:
+            if(valor instanceof String){
+                String s = (String)valor;
+                if(s != "" && nombre.contains(s))
+                    return true;
+            }else{
+                return false;
+            }
+            case CUENTA:
+            if((valor instanceof Integer)){
+                Integer i = (Integer) valor;
+                if(i.intValue() <= this.cuenta)
+                    return true;
+            }
+            else {
+                return false;
+            }
+            case PROMEDIO:
+            if(valor instanceof Double){
+                Double d = (Double)valor;
+                    if(d.doubleValue() <= this.promedio)
+                        return true;
+            } else{
+                return false;
+            }
+            case EDAD:
+            if(valor instanceof Integer){
+             Integer i2 = (Integer)valor;
+                if(i2.intValue() <= this.edad)
+                return true;
+            } else{
+                return false;
+            }
+
+            default:
+            return false;
+
+        }
     }
-}
+    }
+

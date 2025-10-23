@@ -1,5 +1,4 @@
 package mx.unam.ciencias.icc;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -30,7 +29,7 @@ public class Lista<T> implements Iterable<T> {
         /* Construye un nodo con un elemento. */
         private Nodo(T elemento) {
             // Aquí va su código.
-	    this.elemento = elemento;
+	    this.elemento = 
         }
     }
 
@@ -44,38 +43,31 @@ public class Lista<T> implements Iterable<T> {
         /* Construye un nuevo iterador. */
         private Iterador() {
             // Aquí va su código.
-	    
         }
 
         /* Nos dice si hay un elemento siguiente. */
         @Override public boolean hasNext() {
             // Aquí va su código.
-	    return this.siguiente == null;
-	    
         }
 
         /* Nos da el elemento siguiente. */
         @Override public T next() {
             // Aquí va su código.
-	    return this.siguiente;
         }
 
         /* Nos dice si hay un elemento anterior. */
         @Override public boolean hasPrevious() {
             // Aquí va su código.
-	    return this. anterior == null;
         }
 
         /* Nos da el elemento anterior. */
         @Override public T previous() {
             // Aquí va su código.
-	    return this.anterior;
         }
 
         /* Mueve el iterador al inicio de la lista. */
         @Override public void start() {
             // Aquí va su código.
-	    return this.cabeza;
         }
 
         /* Mueve el iterador al final de la lista. */
@@ -97,7 +89,6 @@ public class Lista<T> implements Iterable<T> {
      */
     public int getLongitud() {
         // Aquí va su código.
-	return longitud;
     }
 
     /**
@@ -107,7 +98,6 @@ public class Lista<T> implements Iterable<T> {
      */
     public boolean esVacia() {
         // Aquí va su código.
-	return this.cabeza == null && this.rabo == null;
     }
 
     /**
