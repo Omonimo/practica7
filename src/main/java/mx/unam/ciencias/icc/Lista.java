@@ -75,12 +75,15 @@ public class Lista<T> implements Iterable<T> {
         /* Mueve el iterador al inicio de la lista. */
         @Override public void start() {
             // Aquí va su código.
-	    return this.cabeza;
+            siguiente = cabeza;
+            anterior = null;
         }
 
         /* Mueve el iterador al final de la lista. */
         @Override public void end() {
             // Aquí va su código.
+            siguiente = null;
+            anterior = rabo;
         }
     }
 
@@ -119,6 +122,17 @@ public class Lista<T> implements Iterable<T> {
      */
     public void agregaFinal(T elemento) {
         // Aquí va su código.
+        if(elemento == null)
+            throw new IllegalArgumentException();
+        Nodo n = new Nodo(elemento);
+        longitud++;
+        if(esVacia()){
+            cabeza = rabo = n;
+        } else {
+            rabo.siguiente = n;
+            n.anterior = rabo;
+            rabo = n;
+        }
     }
 
     /**
@@ -130,6 +144,17 @@ public class Lista<T> implements Iterable<T> {
      */
     public void agregaInicio(T elemento) {
         // Aquí va su código.
+        if(elemento == null)
+            throw new IllegalArgumentException();
+        Nodo n = new Nodo(elemento);
+        longitud++;
+        if(esVacia()){
+            cabeza = rabo = n;
+        } else{
+            cabeza.anterior = n;
+            n.siguiente = cabeza;
+            cabeza = n;
+        }
     }
 
     /**
@@ -149,6 +174,30 @@ public class Lista<T> implements Iterable<T> {
      */
     public void inserta(int i, T elemento) {
         // Aquí va su código.
+         if (elemento == null)
+            throw new IllegalArgumentException();
+
+        Nodo n = new Nodo(elemento);
+        int tamanio = getLongitud();
+        if (i <= 0) {
+            agregaInicio(elemento);
+            } else if (i >= tamanio) {
+            agregaFinal(elemento);
+            } else {
+                int index = 0;
+               for(T t : this){
+                if(i == index){
+                    n.anterior = anterior;
+                    anterior.siguiente = n;
+
+                    siguiente.anterior = n;
+                    n.siguiente = siguiente;
+
+                }
+
+               }
+            
+        } 
     }
 
     /**
@@ -158,6 +207,19 @@ public class Lista<T> implements Iterable<T> {
      */
     public void elimina(T elemento) {
         // Aquí va su código.
+         if (elemento == null) {
+            return;
+        }
+
+        if (esVacia()) 
+            return;
+        
+            for(T t : this){
+                if(t.equals(elemento)){
+                    anterior.siguiente = this.siguiente;
+                    siguiente.anterior = this.antetior;
+                }
+            }
     }
 
     /**
@@ -167,6 +229,23 @@ public class Lista<T> implements Iterable<T> {
      */
     public T eliminaPrimero() {
         // Aquí va su código.
+          if(esVacia())
+            throw new NoSuchElementException();
+        
+        Nodo n = this.cabeza; 
+        if (n == null) {
+            return null;
+        } else if (n != null && n.siguiente == null) {
+            this.cabeza = null;
+            this.rabo = null;
+            longitud--;
+            return n.elemento;
+        } else {
+            this.cabeza = this.cabeza.siguiente;
+            this.cabeza.anterior = null;
+            longitud--;
+            return n.elemento;
+        }
     }
 
     /**
@@ -176,6 +255,24 @@ public class Lista<T> implements Iterable<T> {
      */
     public T eliminaUltimo() {
         // Aquí va su código.
+         if(esVacia())
+            throw new NoSuchElementException();
+        
+	    Nodo n = this.rabo;
+        if (n == null) {
+            return null;
+        } else if (n != null && n.anterior == null) {
+            this.cabeza = null;
+            this.rabo = null;
+            longitud--;
+            return n.elemento;
+        } else {
+            this.rabo = this.rabo.anterior;
+            this.rabo.siguiente = null;
+            longitud--;
+            return n.elemento;
+        }
+
     }
 
     /**
@@ -186,6 +283,11 @@ public class Lista<T> implements Iterable<T> {
      */
     public boolean contiene(T elemento) {
         // Aquí va su código.
+        for(T t : this){
+            if(t.equals(elemento))
+                return true; 
+        } return false;
+
     }
 
     /**
@@ -194,6 +296,10 @@ public class Lista<T> implements Iterable<T> {
      */
     public Lista<T> reversa() {
         // Aquí va su código.
+         Lista<T> reversa = new Lista<>();
+        for(T t : this)
+            reversa.agregaInicio(t);
+        return reversa;
     }
 
     /**
@@ -203,6 +309,10 @@ public class Lista<T> implements Iterable<T> {
      */
     public Lista<T> copia() {
         // Aquí va su código.
+         Lista<T> copia = new Lista<>();
+        for(T t : this) 
+            copia.agregaFinal(t);
+        return copia;
     }
 
     /**
@@ -210,6 +320,8 @@ public class Lista<T> implements Iterable<T> {
      */
     public void limpia() {
         // Aquí va su código.
+        for(T t : this)
+            elimina(t);;
     }
 
     /**
@@ -219,6 +331,9 @@ public class Lista<T> implements Iterable<T> {
      */
     public T getPrimero() {
         // Aquí va su código.
+                if(esVacia())
+            throw new NoSuchElementException();
+        return cabeza.elemento;
     }
 
     /**
@@ -228,6 +343,9 @@ public class Lista<T> implements Iterable<T> {
      */
     public T getUltimo() {
         // Aquí va su código.
+        if(esVacia())
+            throw new NoSuchElementException();
+        return rabo.elemento;
     }
 
     /**
@@ -239,6 +357,20 @@ public class Lista<T> implements Iterable<T> {
      */
     public T get(int i) {
         // Aquí va su código.
+          if(i < 0 || i >= longitud){
+            throw new ExcepcionIndiceInvalido();
+        }
+        Nodo n = cabeza;
+        int contador = 0;
+        if (i < 0 || i >= getLongitud()) {
+            return null;
+        } else {
+            while (contador < i) {
+                n = n.siguiente;
+                contador++;
+            }
+            return n.elemento;
+        }
     }
 
     /**
@@ -249,6 +381,19 @@ public class Lista<T> implements Iterable<T> {
      */
     public int indiceDe(T elemento) {
         // Aquí va su código.
+         int contador = 0;
+        Nodo n = cabeza;
+        if (elemento == null) {
+            return -1;
+        }
+        while (n != null) {
+            if (n.elemento.equals(elemento)) {
+                return contador;
+            }
+            n = n.siguiente;
+            contador++;
+        }
+        return -1;
     }
 
     /**
@@ -257,6 +402,17 @@ public class Lista<T> implements Iterable<T> {
      */
     @Override public String toString() {
         // Aquí va su código.
+                String s = "[";
+        Nodo n = cabeza;
+        while (n != null) {
+            s += n.elemento;
+            if (n.siguiente != null) {
+                s += ", ";
+            }
+            n = n.siguiente;
+        }
+        s += "]";
+        return s;
     }
 
     /**
@@ -270,6 +426,20 @@ public class Lista<T> implements Iterable<T> {
             return false;
         @SuppressWarnings("unchecked") Lista<T> lista = (Lista<T>)objeto;
         // Aquí va su código.
+          if(this.longitud != lista.longitud)
+            return false;
+        Nodo viajero = this.cabeza;;
+        Nodo viajeroLista = lista.cabeza;
+        while (viajero != null) {
+            if(!(viajero.elemento.equals(viajeroLista.elemento))){
+                return false;
+            }
+            viajero = viajero.getSiguiente();
+            viajeroLista = viajeroLista.getSiguiente();
+            
+                
+            
+        } return true;
     }
 
     /**

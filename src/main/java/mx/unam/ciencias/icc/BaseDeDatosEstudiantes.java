@@ -12,5 +12,8 @@ public class BaseDeDatosEstudiantes
      */
     @Override public Estudiante creaRegistro() {
         // Aquí va su código.
+        Estudiante estudiante = new Estudiante(null, 0,0.0f , 0);
+
+        return estudiante;
     }
 }

@@ -28,6 +28,7 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public BaseDeDatos() {
         // Aquí va su código.
+        registros = new Lista<R>();
     }
 
     /**
@@ -36,6 +37,7 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public int getNumRegistros() {
         // Aquí va su código.
+        return registros.getLongitud();
     }
 
     /**
@@ -45,6 +47,7 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public Lista<R> getRegistros() {
         // Aquí va su código.
+        return registros.copia();
     }
 
     /**
@@ -53,6 +56,7 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public void agregaRegistro(R registro) {
         // Aquí va su código.
+        registros.agregaFinal(registro);
     }
 
     /**
@@ -61,6 +65,7 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public void eliminaRegistro(R registro) {
         // Aquí va su código.
+        eliminaRegistro(registro);
     }
 
     /**
@@ -68,6 +73,7 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public void limpia() {
         // Aquí va su código.
+        registros.limpia();
     }
 
     /**
@@ -77,6 +83,11 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public void guarda(BufferedWriter out) throws IOException {
         // Aquí va su código.
+        for(T t : this){
+            R r = n.get();
+            out.write(r.seria());
+        }
+
     }
 
     /**
@@ -88,6 +99,23 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public void carga(BufferedReader in) throws IOException {
         // Aquí va su código.
+         registros.limpia();
+        String linea;
+        //tratar de deseriar linea
+        try{
+         // crear linea por registro
+        while((linea = in.readLine()) != null){
+            //crear registro 
+            R r = creaRegistro();
+            //deseriar linea
+            r.deseria(linea);
+            //agregar registro a la base de datos
+            agregaRegistro(r);             
+        }
+    }
+         catch (ExcepcionLineaInvalida error){
+            return;
+    }
     }
 
     /**
@@ -101,6 +129,14 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public Lista<R> buscaRegistros(C campo, Object valor) {
         // Aquí va su código.
+         if(campo == null)
+            throw new IllegalArgumentException();
+        Lista<R> l = new Lista<>();
+        for(R r : this){
+           if(r.casa(campo, valor) == true);
+            l.agregaFinal(r);
+        }
+        return l;
     }
 
     /**
