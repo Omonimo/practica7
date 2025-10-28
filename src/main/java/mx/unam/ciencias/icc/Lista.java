@@ -119,7 +119,7 @@ public class Lista<T> implements Iterable<T> {
      */
     public boolean esVacia() {
         // Aquí va su código.
-        return this.longitud == 0;
+        return cabeza == null && rabo == null;
     }
 
     /**
