@@ -65,7 +65,7 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public void eliminaRegistro(R registro) {
         // Aquí va su código.
-        eliminaRegistro(registro);
+        registros.elimina(registro);
     }
 
     /**
@@ -83,8 +83,7 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
      */
     public void guarda(BufferedWriter out) throws IOException {
         // Aquí va su código.
-        for(T t : this){
-            R r = n.get();
+        for(R r : registros){
             out.write(r.seria());
         }
 
@@ -132,8 +131,8 @@ public abstract class BaseDeDatos<R extends Registro<R, C>, C extends Enum> {
          if(campo == null)
             throw new IllegalArgumentException();
         Lista<R> l = new Lista<>();
-        for(R r : this){
-           if(r.casa(campo, valor) == true);
+        for(R r : registros){
+           if(r.casa(campo, valor))
             l.agregaFinal(r);
         }
         return l;
