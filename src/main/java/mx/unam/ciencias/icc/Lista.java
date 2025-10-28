@@ -134,6 +134,7 @@ public class Lista<T> implements Iterable<T> {
         if(elemento == null)
             throw new IllegalArgumentException();
         Nodo n = new Nodo(elemento);
+        longitud++;
         if(esVacia()){
             cabeza = rabo = n;
         } else {
@@ -141,7 +142,6 @@ public class Lista<T> implements Iterable<T> {
             n.anterior = rabo;
             rabo = n;
         }
-        longitud++;
     }
 
     /**
@@ -156,6 +156,7 @@ public class Lista<T> implements Iterable<T> {
         if(elemento == null)
             throw new IllegalArgumentException();
         Nodo n = new Nodo(elemento);
+        longitud++;
         if(esVacia()){
             cabeza = rabo = n;
         } else{
@@ -163,7 +164,6 @@ public class Lista<T> implements Iterable<T> {
             n.siguiente = cabeza;
             cabeza = n;
         }
-        longitud++;
     }
 
     /**
